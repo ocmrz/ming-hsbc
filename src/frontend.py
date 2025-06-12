@@ -49,22 +49,36 @@ def chat_with_backend(message: str, history: List[List[str]]) -> Iterator[str]:
         yield f"Error: {str(e)}"
 
 # Create Gradio interface
-with gr.Blocks(title="HSBC Well+ Assistant") as demo:
-    gr.Markdown(
-        """
-        # 🏦 HSBC Well+ Assistant
-        
-        Ask questions about HSBC Well+ program, terms and conditions, and data privacy policies.
-        The assistant has access to official HSBC Well+ documentation.
-        
-        **Examples you can try:**
-        - What is HSBC Well+?
-        - How do I earn rewards?
-        - What are the eligibility requirements?
-        - How is my data protected?
-        """
+
+css = """
+.gradio-container {
+    background-image: url('http://localhost:8000/background.jpeg');
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+.column {
+    height: 90vh;
+}
+
+.block, .bubble-wrap {
+    background-color: transparent !important;
+    border: none !important;
+}
+
+.examples {
+    margin-bottom: 2rem;
+}
+
+footer {
+    display: none !important;
+}
+"""
+with gr.Blocks(title="HSBC Well+ Assistant", css=css) as demo:
+    gr.HTML(
+        '<div style="text-align:center;"><img src="http://localhost:8000/team-logo.png" alt="HSBC Well+ Banner" style="max-width:300px; border-radius:12px; margin-bottom:1.5rem;"></div>'
     )
-    
     chatbot = gr.ChatInterface(
         chat_with_backend,
         examples=[
@@ -74,7 +88,8 @@ with gr.Blocks(title="HSBC Well+ Assistant") as demo:
             "How is my personal data used?",
             "What are the eligibility requirements?",
             "Can I cancel my membership?"
-        ]
+        ],
+        
     )
 
 if __name__ == "__main__":
